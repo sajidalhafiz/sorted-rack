@@ -26,6 +26,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (userToken) {
       const decodedToken = jwtDecode(userToken);
+      // console.log("decodedToken: ", decodedToken)
       const { email, role, branch, userId } = decodedToken;
       const userDetails = {
         branch,
@@ -47,6 +48,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await axiosOpen.post(LOGIN_URL, { email, password });
+      // console.log(response?.data?.token)
       setUserToken(response?.data?.token);
     } catch (err) {
       if (err.response.status === 401) {

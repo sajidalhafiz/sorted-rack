@@ -91,7 +91,8 @@ const ListStock = () => {
       },
     });
     userList.current = data.user.filter(
-      (usr) => usr.branch === "Goa" && usr.status === "active"
+      // (usr) => usr.branch === "Goa" && usr.status === "active"
+      (usr) => usr.branch === JSON.parse(localStorage.userDetails).branch && usr.status === "active" // selecting user by branch is now dynamic as current user
     );
     const usersEmail = userList.current.map((user) => user.email);
     setEmailList(usersEmail);
@@ -112,7 +113,7 @@ const ListStock = () => {
     await axiosSecure.post(
       "/assignedProduct",
       {
-        branch: "Goa",
+        branch: JSON.parse(localStorage.userDetails).branch,
         user: selectedUserId,
         product: selectedStockId,
       },
@@ -247,6 +248,7 @@ const ListStock = () => {
             <th>Accessories Name</th>
             <th>Date Of Purchase</th>
             <th>Serial Number</th>
+            <th>Branch</th>
             <th>Warranty</th>
             <th>Action</th>
           </tr>
@@ -258,6 +260,7 @@ const ListStock = () => {
               <td> {item?.accessoriesName} </td>
               <td> {convertDate(item.dateOfPurchase || "")} </td>
               <td> {item.serialNumber} </td>
+              <td> {item.branch} </td>
               <td> {item.warrantyPeriod} </td>
               <td>
                 <Link to={`/stock/edit/${item._id}`} replace>
@@ -362,7 +365,7 @@ const ListStock = () => {
             <Form.Control
               onChange={handleSearch}
               type="text"
-              placeholder={`Search ${deviceCategory}`}
+              placeholder={`Search ${deviceCategory} by Name`}
             />
           </Form.Group>
           {

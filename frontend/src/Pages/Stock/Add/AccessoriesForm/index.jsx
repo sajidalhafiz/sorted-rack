@@ -23,6 +23,7 @@ const AccessoriesFormContainer = () => {
   };
   const schema = yup.object().shape({
     accessoriesType: yup.string().required("Accessories type is required"),
+    assigningBranch: yup.string().required("Accessories Branch is required"), // accessories branch created
     accessoriesName: yup.string().required("Accessories Name is required"),
     serialNumber: yup.string().required("Serial Number is required"),
     dateOfPurchase: yup.string().required("Date of Purchase is required"),
@@ -41,6 +42,7 @@ const AccessoriesFormContainer = () => {
             validationSchema={schema}
             initialValues={{
               accessoriesType: "",
+              assigningBranch: "",
               accessoriesName: "",
               serialNumber: "",
               dateOfPurchase: "",
@@ -53,7 +55,8 @@ const AccessoriesFormContainer = () => {
                     "/product",
                     {
                       productCategory: "Accessories",
-                      branch: "Goa",
+                      // branch: "Goa",
+                      branch: values.assigningBranch, // branch is updated to input branches
                       productType: values.accessoriesType,
                       accessoriesName: values.accessoriesName,
                       serialNumber: values.serialNumber,
@@ -113,6 +116,30 @@ const AccessoriesFormContainer = () => {
                       </Form.Select>
                       <div className="invalid-feedback">
                         {touched.accessoriesType && errors.accessoriesType}
+                      </div>
+                    </FloatingLabel>
+                  </Col>
+                  <Col xl={6}>
+                    <FloatingLabel className="mb-3" label="Assigning Branch">
+                      <Form.Select
+                        type="text"
+                        name="assigningBranch"
+                        value={values.assigningBranch}
+                        onChange={handleChange}
+                        isInvalid={
+                          !!touched.assigningBranch && !!errors.assigningBranch
+                        }
+                        aria-label="Default select example"
+                      >
+                        <option value="" disabled hidden>
+                          select
+                        </option>
+                        <option value="Dhaka">Dhaka</option>
+                        <option value="Sylhet">Sylhet</option>
+                        <option value="Goa">Goa</option>
+                      </Form.Select>
+                      <div className="invalid-feedback">
+                        {touched.assigningBranch && errors.assigningBranch}
                       </div>
                     </FloatingLabel>
                   </Col>
