@@ -5,7 +5,7 @@ const CustomError = require("../errors");
 const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new CustomError.UnauthenticatedError("Invalid Authentication");
+    throw new CustomError.UnauthenticatedError("Invalid Authentication - authHeader not found");
   }
 
   const token = authHeader.split(" ")[1];
@@ -21,7 +21,7 @@ const authenticateUser = async (req, res, next) => {
     };
     next();
   } catch (error) {
-    throw new CustomError.UnauthenticatedError("Invalid Authentication");
+    throw new CustomError.UnauthenticatedError("Invalid Authentication - token not verified");
   }
 };
 

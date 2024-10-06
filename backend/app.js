@@ -71,7 +71,7 @@ console.log(port, "port url");
 const start = async () => {
   try {
     await connDb(process.env.MONGO_URL);
-    app.listen(port, () => console.log("SortedRack Backend Service is Runnning.."));
+    app.listen(port, () => console.log("SortedRack Backend Service is Running.."));
   } catch (error) {
     console.log(error, "MongoDB URL is invalid.");
   }

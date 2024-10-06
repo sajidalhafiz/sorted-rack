@@ -56,13 +56,14 @@ const deleteProduct = async (req, res) => {
     throw new CustomError.NotFoundError(`No product found with ${productId}`)
   }
 
-  await product.remove();
-  res.status(StatusCodes.OK).json({msg:'Product removed sucessfully'})
+  // await product.remove(); // it is deprecated
+  await product.deleteOne(); // new function to delete
+  res.status(StatusCodes.OK).json({msg:'Product removed successfully'})
 };
 
 const deleteAllProduct = async (req, res) => {
   await Product.deleteMany({});
-  res.status(StatusCodes.OK).json({msg:'All products Deleated'})
+  res.status(StatusCodes.OK).json({msg:'All products Deleted'})
 };
 
 module.exports = {

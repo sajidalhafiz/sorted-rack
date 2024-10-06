@@ -29,27 +29,28 @@ const registerUser = async (req, res) => {
     role,
     username,
   });
-  res.status(StatusCodes.CREATED).json({ msg: "Registered user successfully" });
+  res.status(StatusCodes.CREATED).json({ msg: "Registered user successfully", user: user });
 };
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body)
   if (!email || !password) {
     throw new CustomError.BadRequestError("Please provide Email and Password");
   }
 
   const user = await User.findOne({ email });
   if (!user) {
-    throw new CustomError.UnauthenticatedError("Invalid credentionals");
+    throw new CustomError.UnauthenticatedError("Invalid credentials");
   }
 
   const correctPassword = await user.comparePasword(password);
   if (!correctPassword) {
-    throw new CustomError.UnauthenticatedError("Invalid Credentionals");
+    throw new CustomError.UnauthenticatedError("Invalid Credentials - Password not matched");
   }
 
   const token = await user.createJWT();
+  console.log("generated token: ", token)
   res.status(StatusCodes.ACCEPTED).json({ token });
 };
 
