@@ -70,7 +70,7 @@ const createAssignedProduct = async (req, res) => {
 };
 
 const getAllAssignedProduct = async (req, res) => {
-  
+
   if (req.user.role === "superadmin") {
     const response = await AssignedProduct.find({ status: "active" })
       .populate({ path: "user", select: "email fname lname userName" })
@@ -124,13 +124,13 @@ const getAllAssignedProduct = async (req, res) => {
       branch: req.user.branch,
       status: "active",
     })
-    .populate({ path: "user", select: "email fname lname userName" })
-    .populate({
-      path: "product",
-      select:
-        "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
-    })
-    .populate({ path: "assignedBy", select: "email" });
+      .populate({ path: "user", select: "email fname lname userName" })
+      .populate({
+        path: "product",
+        select:
+          "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
+      })
+      .populate({ path: "assignedBy", select: "email" });
 
     const finalResponse = response.map((item) => {
       const assignedDevicesList = {};
@@ -179,15 +179,15 @@ const getSingleAssignedProduct = async (req, res) => {
     const singleAssignedDevice = await AssignedProduct.findOne({
       _id: assignedDeviceId,
     })
-    .populate({ path: "user", select: "email fname lname userName" })
-    .populate({
-      path: "product",
-      select:
-        "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
-    })
-    .populate({ path: "assignedBy", select: "email" });
+      .populate({ path: "user", select: "email fname lname userName" })
+      .populate({
+        path: "product",
+        select:
+          "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
+      })
+      .populate({ path: "assignedBy", select: "email" });
 
-    
+
     if (!singleAssignedDevice) {
       throw new CustomError.NotFoundError(
         `No document found with id ${assignedDeviceId}`
@@ -201,13 +201,13 @@ const getSingleAssignedProduct = async (req, res) => {
       _id: assignedDeviceId,
       branch: req.user.branch,
     })
-    .populate({ path: "user", select: "email fname lname userName" })
-    .populate({
-      path: "product",
-      select:
-        "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
-    })
-    .populate({ path: "assignedBy", select: "email" });
+      .populate({ path: "user", select: "email fname lname userName" })
+      .populate({
+        path: "product",
+        select:
+          "productType branch productCategory warrantyPeriod systemName systemModel systemBrand cpu ram storageType storageCapacity os macAddress productKey serialNumber accessoriesName networkDeviceName tag",
+      })
+      .populate({ path: "assignedBy", select: "email" });
 
     if (!singleAssignedDevice) {
       throw new CustomError.NotFoundError(
@@ -226,6 +226,7 @@ const getCurrentUserAssignedProduct = async (req, res) => {
   if (!myList) {
     throw new CustomError.NotFoundError("No devices assigned");
   }
+  console.log(myList)
   const [{ user: userId }] = myList;
   checkPermission(req.user, userId);
   res.status(StatusCodes.OK).json({ myList });
@@ -272,7 +273,7 @@ const deleteAllAssignedProduct = async (req, res) => {
   await AssignedProduct.deleteMany({});
   res
     .status(StatusCodes.OK)
-    .json({ message: "all assigned products deleated" });
+    .json({ message: "all assigned products deleted" });
 };
 
 module.exports = {
