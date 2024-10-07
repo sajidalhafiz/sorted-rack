@@ -6,6 +6,7 @@ import { Footer, Header, Sidebar } from "../../component";
 const Layout = () => {
   const location = useLocation();
   const { role } = getUserDetails();
+  
   return isLoggedIn() ? (
     role === "superadmin" ? (
       <SidebarContextProvider>
@@ -21,7 +22,19 @@ const Layout = () => {
         </main>
       </SidebarContextProvider>
     ) : (
-      <Navigate to="/login" state={{ from: location }} replace />
+      // <Navigate to="/login" state={{ from: location }} replace />
+      <SidebarContextProvider>
+        <main className="d-flex flex-nowrap">
+          <Sidebar />
+          <div className="w-100 overflow-auto main-wrapper min-vh-100 d-flex flex-column">
+            <Header />
+            <section style={{ minHeight: "85vh" }}>
+              <Outlet />
+            </section>
+            <Footer />
+          </div>
+        </main>
+      </SidebarContextProvider>
     )
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

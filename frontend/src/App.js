@@ -14,9 +14,12 @@ import {
   ListStock,
   AddStock,
   EditSystemDetails,
+  // ReportIssues
 } from "./Pages";
 
 import AssignItem from "./Pages/AssignItems";
+import ReportIssues from "./Pages/ReportIssues";
+import UserDevices from "./Pages/UserDevices";
 
 function App() {
   return (
@@ -33,6 +36,8 @@ function App() {
           <Route path="user" element={<ListUser />} />
           <Route path="user/edit/:id" element={<EditUser />} />
           <Route path="assigned/" element={<AssignItem />} />
+          <Route path="userdevices" element={<UserDevices />} />
+          <Route path="reportissues" element={<ReportIssues />} />
         </Route>
 
         <Route path="login" element={<LoginForm />} />
