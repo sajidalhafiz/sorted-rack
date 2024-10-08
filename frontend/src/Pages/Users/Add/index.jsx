@@ -56,7 +56,7 @@ const AddUser = () => {
           userType: "",
           branch: "",
           status: "",
-          username:""
+          username: "",
         }}
         onSubmit={async (values, { setSubmitting }) => {
           try {
@@ -166,7 +166,7 @@ const AddUser = () => {
                     </div>
                   </FloatingLabel>
                 </Col>
-                
+
                 <Col md={6} lg={6} xl={6}>
                   <FloatingLabel
                     controlId="floatingusername"
