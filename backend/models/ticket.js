@@ -19,26 +19,26 @@ const ticketSchema = new mongoose.Schema(
     ticketDept: {
       type: String,
       required: [true, "please select issue department"],
-      enum: ["Mantainance", "Support", "Repair", "Resource"],
+      enum: ["Maintenance", "Support", "Repair", "Resource"],
       default: "Support",
     },
     priority: {
       type: String,
       required: [true, "Please provide a priority level"],
       enum: {
-        values: ["low", "medium", "high"],
+        values: ["Low", "Medium", "High"],
         message: "{VALUE} is not supported",
       },
-      default: "low",
+      default: "Low",
     },
     status: {
       type: String,
       required: true,
       enum: {
-        values: ["open", "closed"],
+        values: ["Open", "Closed"],
         message: "{VALUE} not supported",
       },
-      default: "open",
+      default: "Open",
     },
     ticketTitle: {
       type: String,
@@ -56,9 +56,9 @@ const ticketSchema = new mongoose.Schema(
           required: true,
           trim: true,
         },
+        // default: []
       },
     ],
-    default: [],
     tag: {
       type: String,
       required: true,
@@ -71,11 +71,6 @@ const ticketSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: true,
-    },
-    assignedTo: {
-      type: mongoose.Types.ObjectId,
-      ref: "Assignee",
       required: true,
     },
   },
