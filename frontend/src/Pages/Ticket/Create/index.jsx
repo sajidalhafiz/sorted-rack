@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { Toaster } from "../../../component/Toaster/Toaster";
 
 const schema = yup.object().shape({
-  branch: yup.string().required("Branch is required"),
+  
   dueDate: yup.date().required("Due Date is required"),
   ticketDept: yup.string().required("Ticket Department is required"),
   priority: yup.string().required("Priority is required"),
@@ -22,11 +22,11 @@ const schema = yup.object().shape({
 });
 
 const handleOnSubmit = (values) =>
-  
+
   axiosSecure.post(
     "/ticket/createTicket",
     {
-      branch: values.branch,
+      branch: JSON.parse(localStorage.userDetails).branch,
       dueDate: values.dueDate,
       ticketDept: values.ticketDept,
       priority: values.priority,
@@ -52,7 +52,6 @@ const CreateTicket = () => {
       <Formik
         validationSchema={schema}
         initialValues={{
-          branch: "",
           dueDate: "",
           ticketDept: "",
           priority: "",
@@ -90,7 +89,7 @@ const CreateTicket = () => {
             <Container className="add-ticket-page d-flex flex-column justify-content-center">
               <h2 className="mb-4">Create Ticket</h2>
               <Row>
-                <Col md={6} lg={6} xl={6}>
+                {/* <Col md={6} lg={6} xl={6}>
                   <FloatingLabel controlId="floatingBranch" label="Branch" className="mb-3">
                     <Form.Select
                       className="form-select"
@@ -109,7 +108,7 @@ const CreateTicket = () => {
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">{errors.branch}</Form.Control.Feedback>
                   </FloatingLabel>
-                </Col>
+                </Col> */}
                 <Col md={6}>
                   <FloatingLabel controlId="floatingDueDate" label="Due Date" className="mb-3">
                     <Form.Control

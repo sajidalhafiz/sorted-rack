@@ -55,7 +55,9 @@ function App() {
             <>
               <Route path="deviceRequest" element={<RequestDevice />} />
               <Route path="myRequest" element={<MyRequest />} />
+              <Route path="ticket" element={<TicketList />} />
               <Route path="ticket/createTicket" element={<CreateTicket />} />
+              <Route path="ticket/addMessage/:id" element={<Messsage />} />
             </>
           )}
         </Route>
