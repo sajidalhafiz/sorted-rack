@@ -23,6 +23,8 @@ import RequestDevice from "./Pages/RequestDevice";
 import MyRequest from "./Pages/MyRequests/indext";
 import AllRequests from "./Pages/AllRequests";
 import CreateTicket from "./Pages/Ticket/Create";
+import TicketList from "./Pages/Ticket/List";
+import Messsage from "./Pages/Ticket/Message";
 
 function App() {
   const { role } = getUserDetails();
@@ -43,7 +45,9 @@ function App() {
               <Route path="user" element={<ListUser />} />
               <Route path="user/edit/:id" element={<EditUser />} />
               <Route path="assigned/" element={<AssignItem />} />
-              <Route path="createTicket" element={<CreateTicket />} />
+              <Route path="ticket" element={<TicketList />} />
+              <Route path="ticket/createTicket" element={<CreateTicket />} />
+              <Route path="ticket/addMessage/:id" element={<Messsage />} />
             </>
           )}
 
@@ -51,7 +55,7 @@ function App() {
             <>
               <Route path="deviceRequest" element={<RequestDevice />} />
               <Route path="myRequest" element={<MyRequest />} />
-              <Route path="createTicket" element={<CreateTicket />} />
+              <Route path="ticket/createTicket" element={<CreateTicket />} />
             </>
           )}
         </Route>
