@@ -32,6 +32,26 @@ const getSingleTicket = async (req, res) => {
   res.status(StatusCodes.OK).json({ ticket });
 };
 
+const getCurrentUserTickets = async (req, res) => {
+  try {
+    const userTickets = await Ticket.find({
+      createdBy: req.user.userId,
+    }).sort({ createdAt: -1 }); // Sort by creation date, newest first
+
+    if (!userTickets || userTickets.length === 0) {
+      throw new CustomError.NotFoundError("No tickets found for this user");
+    }
+
+    res.status(StatusCodes.OK).json({ tickets: userTickets, count: userTickets.length });
+  } catch (error) {
+    if (error instanceof CustomError.NotFoundError) {
+      res.status(StatusCodes.NOT_FOUND).json({ msg: error.message });
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "Error fetching tickets" });
+    }
+  }
+};
+
 const createTicket = async (req, res) => {
   const { 
     branch, 
@@ -165,4 +185,5 @@ module.exports = {
   deleteTicket,
   addMessage,
   updateMessage,
+  getCurrentUserTickets,
 };

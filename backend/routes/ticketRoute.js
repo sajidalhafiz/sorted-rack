@@ -8,7 +8,8 @@ const {
   updateTicket,
   deleteTicket,
   addMessage,
-  updateMessage
+  updateMessage,
+  getCurrentUserTickets
 } = require("../controllers/ticketController");
 
 const {
@@ -21,6 +22,10 @@ router
   .route("/")
   .get(authenticateUser, getAllTickets);
 
+
+router
+.route("/currentUserTicket")
+.get(authenticateUser, getCurrentUserTickets)
 // Create a new ticket
 router
   .route("/createTicket")
