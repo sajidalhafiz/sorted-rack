@@ -30,6 +30,7 @@ const productRoute = require("./routes/productRoute");
 const assignedProductRoute = require("./routes/assignedProductRoute");
 const deviceRequestRoute = require("./routes/deviceRequestRoute");
 const ticketRoute = require("./routes/ticketRoute");
+const assignedTicketRoute = require("./routes/assignedTicketRoute");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
@@ -66,6 +67,7 @@ app.use("/api/st/product", productRoute);
 app.use("/api/st/assignedProduct", assignedProductRoute);
 app.use("/api/st/deviceRequest", deviceRequestRoute);
 app.use("/api/st/ticket", ticketRoute);
+app.use("/api/st/assignedTicket", assignedTicketRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
