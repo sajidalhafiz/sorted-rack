@@ -5,11 +5,18 @@ import { SidebarContext } from "../../../contexts/SidebarContext";
 import logo from "../../../assests/images/sorted-rack-logo.svg";
 
 import "./Sidebar.scss";
-import { getUserDetails } from "../../../service";
+import { getUserDetails, logout } from "../../../service";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { activeMenu, setActiveMenu } = useContext(SidebarContext);
   const { role, email } = getUserDetails();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/login", { replace: true });
+    logout();
+  };
 
   const superadmin_navLinks = (
     <>
@@ -79,30 +86,7 @@ const Sidebar = () => {
           <span>Stock</span>
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/allRequests"
-          className={({ isActive }) =>
-            `nav-link text-white ${isActive ? "active" : undefined}`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-person-check pe-none me-2"
-            viewBox="0 0 16 16"
-          >
-            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-            <path
-              fillRule="evenodd"
-              d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
-            />
-          </svg>
-          <span>Assigned Tickets</span>
-        </NavLink>
-      </li>
+
       <li>
         <NavLink
           to="/ticket"
@@ -127,30 +111,7 @@ const Sidebar = () => {
           <span>Ticket List</span>
         </NavLink>
       </li>
-      {/* <li>
-        <NavLink
-          to="ticket/createTicket"
-          className={({ isActive }) =>
-            `nav-link text-white ${isActive ? "active" : undefined}`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-person-check pe-none me-2"
-            viewBox="0 0 16 16"
-          >
-            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-            <path
-              fillRule="evenodd"
-              d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
-            />
-          </svg>
-          <span>Create Ticket</span>
-        </NavLink>
-      </li> */}
+
       <li>
         <NavLink
           to="/assigned"
@@ -173,6 +134,30 @@ const Sidebar = () => {
             />
           </svg>
           <span>Assigned Devices</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/assignedTicket"
+          className={({ isActive }) =>
+            `nav-link text-white ${isActive ? "active" : undefined}`
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-person-check pe-none me-2"
+            viewBox="0 0 16 16"
+          >
+            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+            <path
+              fillRule="evenodd"
+              d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+          <span>Assigned Tickets</span>
         </NavLink>
       </li>
     </>
@@ -221,6 +206,30 @@ const Sidebar = () => {
           <span>Admin</span>
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to="/assignedTicket"
+          className={({ isActive }) =>
+            `nav-link text-white ${isActive ? "active" : undefined}`
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-person-check pe-none me-2"
+            viewBox="0 0 16 16"
+          >
+            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+            <path
+              fillRule="evenodd"
+              d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+          <span>Assigned Tickets</span>
+        </NavLink>
+      </li>
     </>
   );
 
@@ -228,7 +237,7 @@ const Sidebar = () => {
     <>
       <li>
         <NavLink
-          to="/ticket"
+          to="/"
           className={({ isActive }) =>
             `nav-link text-white ${isActive ? "active" : undefined}`
           }
@@ -250,7 +259,7 @@ const Sidebar = () => {
           <span>Ticket List</span>
         </NavLink>
       </li>
-      <li className="nav-item">
+      {/* <li className="nav-item">
         <NavLink
           end={true}
           to="/deviceRequest"
@@ -271,7 +280,7 @@ const Sidebar = () => {
           <span>Request Device</span>
         </NavLink>
       </li>
-      <li>
+      <li> 
         <NavLink
           to="/myRequest"
           className={({ isActive }) =>
@@ -290,7 +299,7 @@ const Sidebar = () => {
           </svg>
           <span>My Requests</span>
         </NavLink>
-      </li>
+      </li> */}
     </>
   );
 
@@ -361,9 +370,12 @@ const Sidebar = () => {
               <hr className="dropdown-divider" />
             </li>
             <li>
-              <a className="dropdown-item" href="#">
-                Sign out
-              </a>
+              <span
+                onClick={handleLogout}
+                className="text-danger dropdown-item"
+              >
+                Logout
+              </span>
             </li>
           </ul>
         </div>

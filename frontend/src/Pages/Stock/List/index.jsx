@@ -92,7 +92,9 @@ const ListStock = () => {
     });
     userList.current = data.user.filter(
       // (usr) => usr.branch === "Goa" && usr.status === "active"
-      (usr) => usr.branch === JSON.parse(localStorage.userDetails).branch && usr.status === "active" // selecting user by branch is now dynamic as current user
+      (usr) =>
+        usr.branch === JSON.parse(localStorage.userDetails).branch &&
+        usr.status === "active" // selecting user by branch is now dynamic as current user
     );
     const usersEmail = userList.current.map((user) => user.email);
     setEmailList(usersEmail);

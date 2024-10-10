@@ -25,6 +25,7 @@ import AllRequests from "./Pages/AllRequests";
 import CreateTicket from "./Pages/Ticket/Create";
 import TicketList from "./Pages/Ticket/List";
 import Messsage from "./Pages/Ticket/Message";
+import AssignedTickets from "./Pages/AssignedTickets";
 
 function App() {
   const { role } = getUserDetails();
@@ -40,22 +41,32 @@ function App() {
               <Route path="stock/add" element={<AddStock />} />
               <Route path="stock/edit/:id" element={<EditSystemDetails />} />
               <Route path="allitems" element={<Allitems />} />
-              <Route path="allRequests" element={<AllRequests />} />
+              {/* <Route path="allRequests" element={<AllRequests />} /> */}
               <Route path="user/add" element={<AddUser />} />
               <Route path="user" element={<ListUser />} />
               <Route path="user/edit/:id" element={<EditUser />} />
               <Route path="assigned/" element={<AssignItem />} />
               <Route path="ticket" element={<TicketList />} />
-              <Route path="ticket/createTicket" element={<CreateTicket />} />
+              {/* <Route path="ticket/createTicket" element={<CreateTicket />} /> */}
               <Route path="ticket/addMessage/:id" element={<Messsage />} />
+              <Route path="assignedTicket" element={<AssignedTickets />} />
             </>
           )}
 
+          {role === "admin" && (
+            <>
+               <Route index element={<Dashboard />} />
+               <Route path="user" element={<ListUser />} />
+               <Route path="ticket" element={<TicketList />} />
+               <Route path="assignedTicket" element={<AssignedTickets />} />
+            </>
+          )}
           {role === "user" && (
             <>
-              <Route path="deviceRequest" element={<RequestDevice />} />
-              <Route path="myRequest" element={<MyRequest />} />
-              <Route path="ticket" element={<TicketList />} />
+              {/* <Route path="deviceRequest" element={<RequestDevice />} /> */}
+              {/* <Route path="myRequest" element={<MyRequest />} /> */}
+              {/* <Route path="ticket" element={<TicketList />} /> */}
+              <Route index element={<TicketList />} />
               <Route path="ticket/createTicket" element={<CreateTicket />} />
               <Route path="ticket/addMessage/:id" element={<Messsage />} />
             </>

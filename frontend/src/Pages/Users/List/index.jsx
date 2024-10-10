@@ -10,6 +10,7 @@ import { axiosSecure } from "../../../api/axios";
 import useAxios from "../../../Hooks/useAxios";
 import "./listUser.scss";
 import PaginationComponent from "../../../component/Pagination/Pagination";
+
 const ListUser = () => {
   const [response, error, loading, axiosFetch] = useAxios();
   const [search, setSearch] = useState("");
@@ -39,6 +40,13 @@ const ListUser = () => {
     fetchUserDetails();
   }, []);
 
+  useEffect(() => {
+    if (response?.user) {
+      console.log("All users:", response.user);
+      setTotalItems(response.user.length);
+    }
+  }, [response]);
+
   const handleStatusToggle = async (user) => {
     await axiosSecure.patch(
       `/user/updateuser/${user._id}`,
@@ -61,13 +69,15 @@ const ListUser = () => {
     let filteredResult = response?.user?.sort((a, b) =>
       a.fname.localeCompare(b.fname)
     );
-    setTotalItems(filteredResult?.length);
 
     if (search) {
-      filteredResult = filteredResult.filter((currentItem) =>
-        currentItem.fname.toLowerCase().includes(search.toLowerCase()) || currentItem.username.toLowerCase().includes(search.toLowerCase())
+      filteredResult = filteredResult?.filter(
+        (currentItem) =>
+          currentItem.fname.toLowerCase().includes(search.toLowerCase()) ||
+          currentItem.username.toLowerCase().includes(search.toLowerCase())
       );
     }
+
     return filteredResult?.slice(
       (currentPage - 1) * ITEMS_PER_PAGE,
       (currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
@@ -109,7 +119,7 @@ const ListUser = () => {
           </div>
         </div>
       )}
-      {!loading && error && <p classname="error-msg">{error}</p>}
+      {!loading && error && <p className="error-msg">{error}</p>}
 
       {totalItems && (
         <div className="user-table">

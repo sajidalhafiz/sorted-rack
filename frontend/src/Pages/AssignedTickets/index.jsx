@@ -16,7 +16,7 @@ const AssignedTickets = () => {
   const [showToaster, setShowToaster] = useState(false);
 
   const getAssignedTicketDetails = async () => {
-    const response = await axiosSecure.get("/assigned-tickets", {
+    const response = await axiosSecure.get("/assignedTicket", {
       headers: {
         Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
       },
@@ -36,7 +36,7 @@ const AssignedTickets = () => {
   const handleUnassignment = async (assignedTicketId) => {
     try {
       const response = await axiosSecure.patch(
-        `assigned-tickets/${assignedTicketId}`,
+        `assignedTicket/${assignedTicketId}`,
         {},
         {
           headers: {

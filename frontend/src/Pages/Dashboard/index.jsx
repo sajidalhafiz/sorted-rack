@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { axiosSecure } from "../../api/axios";
 
-const Dashbaord = () => {
+const Dashboard = () => {
   const [dashboardStats, setDashboardStats] = useState({});
+  const [ticketStats, setTicketStats] = useState({});
 
   useEffect(() => {
-    (async () => {
+    fetchProductStats();
+    fetchTicketStats();
+  }, []);
+
+  const fetchProductStats = async () => {
+    try {
       const response = await axiosSecure.get("/product", {
         headers: {
           Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
@@ -42,12 +48,39 @@ const Dashbaord = () => {
           },
         ]);
       }
-    })();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching product stats:", error);
+    }
+  };
+
+  const fetchTicketStats = async () => {
+    try {
+      const response = await axiosSecure.get("/ticket", {
+        headers: {
+          Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
+        },
+      });
+      if (response?.data?.tickets) {
+        const { tickets } = response.data;
+
+        const totalTickets = tickets.length;
+        const assignedTickets = tickets.filter(ticket => ticket.tag === "assigned").length;
+        const unassignedTickets = tickets.filter(ticket => ticket.tag === "notassigned").length;
+
+        setTicketStats({
+          totalTickets,
+          assignedTickets,
+          unassignedTickets,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching ticket stats:", error);
+    }
+  };
 
   return (
     <div className="stock-main-body container">
-      <h2 className="py-3">My Stock</h2>
+      <h2 className="py-3">Dashboard</h2>
       <div className="row">
         {dashboardStats.length > 0 &&
           dashboardStats.map((stock, index) => (
@@ -69,9 +102,26 @@ const Dashbaord = () => {
               </div>
             </div>
           ))}
+        <div className="col-xl-3 col-lg-3 col-md-6">
+          <div className="single-stock rounded-3 shadow text-center pt-5 mr-3 mb-3">
+            <h1 className="pb-3 fw-normal ">{ticketStats.totalTickets || 0}</h1>
+            <h5 className="mb-1 productName text-capitalize">Tickets</h5>
+            <p className="stock-available border-bottom border-dark pb-5 stock">
+              Assigned: {ticketStats.assignedTickets || 0}
+            </p>
+            <div className="total-stock row d-flex justify-content-center align-items-center">
+              <div className="col-md-6 text-upercase">
+                <p>Unassigned</p>
+              </div>
+              <div className="col-md-6">
+                <h1 className="fw-normal">{ticketStats.unassignedTickets || 0}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Dashbaord;
+export default Dashboard;
