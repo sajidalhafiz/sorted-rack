@@ -33,7 +33,7 @@ const getAllUsers = async (req, res) => {
     return { ...u, username: u?.username || "" };
   });
 
-  console.log(users);
+  // console.log(users);
 
   res.status(StatusCodes.OK).json({ user: users, nbhits: users.length });
 };
