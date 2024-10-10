@@ -19,27 +19,27 @@
   },
   {
     "id": 4,
-    "fieldName": "Username",
-    "name": "username",
-    "show": true
-  },
-  {
-    "id": 5,
     "fieldName": "Branch",
     "name": "branch",
     "show": true
   },
   {
-    "id": 6,
+    "id": 5,
     "fieldName": "Warranty Period",
     "name": "warrantyPeriod",
     "show": false
   },
   {
-    "id": 7,
+    "id": 6,
     "fieldName": "Product Category",
     "name": "productCategory",
     "show": false
+  },
+  {
+    "id": 7,
+    "fieldName": "Username",
+    "name": "username",
+    "show": true
   },
   {
     "id": 8,
