@@ -49,7 +49,9 @@ app.use(
 app.use(express.json());
 
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  noCache: true
+}));
 app.use(xss());
 app.use(morgan("tiny"));
 

@@ -9,7 +9,10 @@ const {
   deleteTicket,
   addMessage,
   updateMessage,
-  getCurrentUserTickets
+  getCurrentUserTickets,
+  deleteAllTickets,
+  updateTicketStatus,
+  updateTicketPriority
 } = require("../controllers/ticketController");
 
 const {
@@ -24,8 +27,8 @@ router
 
 
 router
-.route("/currentUserTicket")
-.get(authenticateUser, getCurrentUserTickets)
+  .route("/currentUserTicket")
+  .get(authenticateUser, getCurrentUserTickets)
 // Create a new ticket
 router
   .route("/createTicket")
@@ -55,5 +58,19 @@ router
 router
   .route("/updateMessage/:id/:messageId")
   .patch(authenticateUser, updateMessage);
+
+router
+  .route("/deleteAllTickets")
+  .delete(authenticateUser, authorizeRoles("superadmin", "admin"), deleteAllTickets);
+
+// Update ticket status
+router
+  .route("/updateTicketStatus/:id")
+  .patch(authenticateUser, updateTicketStatus);
+
+// Update ticket priority
+router
+  .route("/updateTicketPriority/:id")
+  .patch(authenticateUser, updateTicketPriority);
 
 module.exports = router;

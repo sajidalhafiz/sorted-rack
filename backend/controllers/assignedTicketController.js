@@ -67,60 +67,104 @@ const createAssignedTicket = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ msg: "Ticket assigned successfully" });
 };
 
+// const getAllAssignedTickets = async (req, res) => {
+//   let query = { status: "active" };
+//   if (req.user.role === "admin") {
+//     query.branch = req.user.branch;
+//   }
+
+//   const response = await AssignedTicket.find(query)
+//     .populate({ path: "user", select: "email fname lname username" })
+//     .populate({
+//       path: "ticket",
+//       select: "ticketTitle ticketDept priority status createdAt dueDate",
+//     })
+//     .populate({ path: "assignedBy", select: "email" });
+
+//   const finalResponse = response.map((item) => ({
+//     _id: item._id,
+//     firstName: item.user.fname,
+//     lastName: item.user.lname,
+//     email: item.user.email,
+//     username: item.user.username,
+//     branch: item.branch,
+//     ticketTitle: item.ticket.ticketTitle,
+//     ticketDept: item.ticket.ticketDept,
+//     priority: item.ticket.priority,
+//     status: item.ticket.status,
+//     createdAt: item.ticket.createdAt,
+//     dueDate: item.ticket.dueDate,
+//     assignedBy: item.assignedBy.email,
+//     assignedAt: item.createdAt,
+//   }));
+
+//   res.status(StatusCodes.OK).json({ assignedTickets: finalResponse });
+// };
+
 const getAllAssignedTickets = async (req, res) => {
-  let query = { status: "active" };
-  if (req.user.role === "admin") {
-    query.branch = req.user.branch;
+  try {
+    const assignedTickets = await AssignedTicket.find({})
+      .populate('user', 'firstName lastName email')
+      .populate('ticket')
+      .populate('assignedBy', 'email');
+
+    const formattedTickets = assignedTickets.map(ticket => {
+      // Check if ticket or ticket.ticket is null
+      if (!ticket || !ticket.ticket) {
+        console.error(`Found an assigned ticket with missing ticket data: ${ticket?._id}`);
+        return null;  // or return a placeholder object
+      }
+
+      return {
+        _id: ticket._id,
+        firstName: ticket.user?.firstName || 'N/A',
+        lastName: ticket.user?.lastName || 'N/A',
+        email: ticket.user?.email || 'N/A',
+        ticketTitle: ticket.ticket?.ticketTitle || 'N/A',
+        ticketDept: ticket.ticket?.ticketDept || 'N/A',
+        priority: ticket.ticket?.priority || 'N/A',
+        status: ticket.ticket?.status || 'N/A',
+        dueDate: ticket.ticket?.dueDate || null,
+        assignedBy: ticket.assignedBy?.email || 'N/A'
+      };
+    }).filter(ticket => ticket !== null);  // Remove any null entries
+
+    res.status(StatusCodes.OK).json({ assignedTickets: formattedTickets });
+  } catch (error) {
+    console.error('Error in getAllAssignedTickets:', error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching assigned tickets' });
   }
-
-  const response = await AssignedTicket.find(query)
-    .populate({ path: "user", select: "email fname lname username" })
-    .populate({
-      path: "ticket",
-      select: "ticketTitle ticketDept priority status createdAt dueDate",
-    })
-    .populate({ path: "assignedBy", select: "email" });
-
-  const finalResponse = response.map((item) => ({
-    _id: item._id,
-    firstName: item.user.fname,
-    lastName: item.user.lname,
-    email: item.user.email,
-    username: item.user.username,
-    branch: item.branch,
-    ticketTitle: item.ticket.ticketTitle,
-    ticketDept: item.ticket.ticketDept,
-    priority: item.ticket.priority,
-    status: item.ticket.status,
-    createdAt: item.ticket.createdAt,
-    dueDate: item.ticket.dueDate,
-    assignedBy: item.assignedBy.email,
-    assignedAt: item.createdAt,
-  }));
-
-  res.status(StatusCodes.OK).json({ assignedTickets: finalResponse });
 };
 
 const getSingleAssignedTicket = async (req, res) => {
   const { id: assignedTicketId } = req.params;
+  console.log('Fetching assigned ticket for ID:', ticketId);
 
-  let query = { _id: assignedTicketId };
-  if (req.user.role === "admin") {
-    query.branch = req.user.branch;
+  try {
+    let query = { ticket: ticketId };
+    if (req.user.role === "admin") {
+      query.branch = req.user.branch;
+    }
+
+    const singleAssignedTicket = await AssignedTicket.findOne(query)
+      .populate({ path: "user", select: "email fname lname branch" })
+      .populate({
+        path: "ticket",
+        select: "ticketTitle ticketDept priority status createdAt dueDate message",
+      })
+      .populate({ path: "assignedBy", select: "email" });
+
+    if (!singleAssignedTicket) {
+      console.log('No assigned ticket found for ID:', ticketId);
+      throw new CustomError.NotFoundError(`No assigned ticket found with id ${assignedTicketId}`);
+    }
+    console.log('Successfully fetched assigned ticket');
+    res.status(StatusCodes.OK).json({ assignedTicket: singleAssignedTicket });
   }
-
-  const singleAssignedTicket = await AssignedTicket.findOne(query)
-    .populate({ path: "user", select: "email fname lname username" })
-    .populate({
-      path: "ticket",
-      select: "ticketTitle ticketDept priority status createdAt dueDate message",
-    })
-    .populate({ path: "assignedBy", select: "email" });
-
-  if (!singleAssignedTicket) {
-    throw new CustomError.NotFoundError(`No document found with id ${assignedTicketId}`);
+  catch (error) {
+    console.error('Error in getSingleAssignedTicket:', error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
-  res.status(StatusCodes.OK).json({ assignedTicket: singleAssignedTicket });
 };
 
 const getCurrentUserAssignedTickets = async (req, res) => {

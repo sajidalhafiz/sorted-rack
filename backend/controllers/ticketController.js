@@ -14,7 +14,7 @@ const getAllTickets = async (req, res) => {
 
   const tickets = await result;
 
-  console.log(tickets)
+  // console.log(tickets)
 
   res.status(StatusCodes.OK).json({ tickets, nbhits: tickets.length });
 };
@@ -22,7 +22,11 @@ const getAllTickets = async (req, res) => {
 const getSingleTicket = async (req, res) => {
   const { id: ticketId } = req.params;
   const ticket = await Ticket.findOne({ _id: ticketId })
-    .populate('createdBy', 'fname lname');
+    .populate('createdBy', 'fname lname email branch')
+    .populate({
+      path: 'message.authorId',
+      select: 'fname lname email branch'
+    });
 
   if (!ticket) {
     throw new CustomError.NotFoundError(`No ticket found with id ${ticketId}`);
@@ -53,14 +57,14 @@ const getCurrentUserTickets = async (req, res) => {
 };
 
 const createTicket = async (req, res) => {
-  const { 
-    branch, 
-    dueDate, 
-    ticketDept, 
-    priority, 
-    ticketTitle, 
-    message, 
-    assignedTo 
+  const {
+    branch,
+    dueDate,
+    ticketDept,
+    priority,
+    ticketTitle,
+    message,
+    assignedTo
   } = req.body;
 
   if (!branch || !dueDate || !ticketDept || !priority || !ticketTitle || !message) {
@@ -117,7 +121,7 @@ const deleteTicket = async (req, res) => {
 
   checkPermission(req.user, ticket.createdBy);
 
-  await ticket.remove();
+  await ticket.deleteOne();
 
   res.status(StatusCodes.OK).json({ message: "Ticket successfully deleted" });
 };
@@ -177,6 +181,45 @@ const updateMessage = async (req, res) => {
   res.status(StatusCodes.OK).json({ ticket });
 };
 
+const deleteAllTickets = async (req, res) => {
+  await Ticket.deleteMany({});
+  res.status(StatusCodes.OK).json({ message: "All tickets deleted" });
+};
+
+const updateTicketStatus = async (req, res) => {
+  const { id: ticketId } = req.params;
+  const { status } = req.body;
+
+  const ticket = await Ticket.findOneAndUpdate(
+    { _id: ticketId },
+    { status },
+    { new: true, runValidators: true }
+  );
+
+  if (!ticket) {
+    throw new CustomError.NotFoundError(`No ticket found with id ${ticketId}`);
+  }
+
+  res.status(StatusCodes.OK).json({ ticket });
+};
+
+const updateTicketPriority = async (req, res) => {
+  const { id: ticketId } = req.params;
+  const { priority } = req.body;
+
+  const ticket = await Ticket.findOneAndUpdate(
+    { _id: ticketId },
+    { priority },
+    { new: true, runValidators: true }
+  );
+
+  if (!ticket) {
+    throw new CustomError.NotFoundError(`No ticket found with id ${ticketId}`);
+  }
+
+  res.status(StatusCodes.OK).json({ ticket });
+};
+
 module.exports = {
   getAllTickets,
   getSingleTicket,
@@ -186,4 +229,7 @@ module.exports = {
   addMessage,
   updateMessage,
   getCurrentUserTickets,
+  deleteAllTickets,
+  updateTicketStatus,
+  updateTicketPriority,
 };
