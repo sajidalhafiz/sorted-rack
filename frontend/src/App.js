@@ -26,6 +26,7 @@ import CreateTicket from "./Pages/Ticket/Create";
 import TicketList from "./Pages/Ticket/List";
 import Messsage from "./Pages/Ticket/Message";
 import AssignedTickets from "./Pages/AssignedTickets";
+import TicketDetails from "./Pages/Ticket/TicketDetails";
 
 function App() {
   const { role } = getUserDetails();
@@ -50,6 +51,7 @@ function App() {
               {/* <Route path="ticket/createTicket" element={<CreateTicket />} /> */}
               <Route path="ticket/addMessage/:id" element={<Messsage />} />
               <Route path="assignedTicket" element={<AssignedTickets />} />
+              <Route path="ticket/details/:id" element={<TicketDetails />} />
             </>
           )}
 

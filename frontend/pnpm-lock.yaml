@@ -26,6 +26,9 @@ importers:
       bootstrap-icons:
         specifier: ^1.11.3
         version: 1.11.3
+      duo-icons:
+        specifier: ^1.1.4
+        version: 1.1.4
       formik:
         specifier: ^2.4.6
         version: 2.4.6(react@18.3.1)
@@ -2389,6 +2392,9 @@ packages:
   dotenv@10.0.0:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
+
+  duo-icons@1.1.4:
+    resolution: {integrity: sha512-x6pftwWEeAzqoD/obLHWkrXPE5ivd4fLYWh2xzmItv91kA4krLHj94I+oAPPmFBuPsgFQDuJqhbLP4pJqNShcw==}
 
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
@@ -8568,6 +8574,8 @@ snapshots:
   dotenv-expand@5.1.0: {}
 
   dotenv@10.0.0: {}
+
+  duo-icons@1.1.4: {}
 
   duplexer@0.1.2: {}
 

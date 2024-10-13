@@ -5,6 +5,8 @@ import { Form, Table, Toast, Container, Dropdown, Col } from "react-bootstrap";
 import { axiosSecure } from "../../api/axios";
 import PaginationComponent from "../../component/Pagination/Pagination";
 import Columns from "../../constants/AssignedTicketColumns.json";
+import addIcon from "../../assests/icons/add-circle-svgrepo-com.svg";
+import unassignIcon from "../../assests/icons/user-minus-rounded-svgrepo-com.svg";
 
 const AssignedTickets = () => {
   const [columns, setColumns] = useState(Columns);
@@ -15,14 +17,34 @@ const AssignedTickets = () => {
   const ITEMS_PER_PAGE = 10;
   const [showToaster, setShowToaster] = useState(false);
 
-  const getAssignedTicketDetails = async () => {
-    const response = await axiosSecure.get("/assignedTicket", {
-      headers: {
-        Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
-      },
-    });
+  // const getAssignedTicketDetails = async () => {
+  //   const response = await axiosSecure.get("/assignedTicket", {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
+  //     },
+  //   });
 
-    setAssignedTicketsList(response?.data?.assignedTickets);
+  //   setAssignedTicketsList(response?.data?.assignedTickets);
+  // };
+
+  const getAssignedTicketDetails = async () => {
+    try {
+      const response = await axiosSecure.get("/assignedTicket", {
+        headers: {
+          Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
+        },
+      });
+
+      if (response.data && response.data.assignedTickets) {
+        setAssignedTicketsList(response.data.assignedTickets);
+      } else {
+        console.error('Unexpected response format:', response);
+        setAssignedTicketsList([]);
+      }
+    } catch (error) {
+      console.error('Error fetching assigned tickets:', error);
+      setAssignedTicketsList([]);
+    }
   };
 
   const getDate = (date) => {
@@ -65,7 +87,7 @@ const AssignedTickets = () => {
     let filteredResult = assignedTicketsList;
     setTotalItems(filteredResult?.length);
     if (search) {
-      filteredResult = filteredResult.filter((result) => 
+      filteredResult = filteredResult.filter((result) =>
         result.firstName.toLowerCase().includes(search.toLowerCase()) ||
         result.ticketTitle.toLowerCase().includes(search.toLowerCase())
       );
@@ -79,7 +101,7 @@ const AssignedTickets = () => {
   const handlerCheckbox = (e) => {
     const checkboxStatus = e.target.checked;
     const name = e.target.name;
-    const updatedColumns = columns.length > 0  && columns.map((column) => {
+    const updatedColumns = columns.length > 0 && columns.map((column) => {
       if (column.name === name) {
         column.show = !column.show;
       }
@@ -90,20 +112,20 @@ const AssignedTickets = () => {
   };
 
   return (
-    <Container>
-      <div className="d-flex align-items-center justify-content-between">
+    <div className="flex-grow-1 mt-3 h-100 w-100 px-4">
+      <div className="d-flex align-items-center justify-content-between border-bottom border-2">
         <div className="col-9">
-          <h2 className="py-3">Assigned Tickets</h2>
+          <h2 className=" py-3 text-uppercase fw-bolder">Assigned Tickets</h2>
         </div>
         <Form.Group as={Col} md="3" className="pe-3" controlId="validationCustom01">
           <Form.Control onChange={handleSearch} type="text" placeholder="Search tickets by name or title" />
         </Form.Group>
       </div>
 
-      <div className="d-flex justify-content-end">
+      <div className="d-flex justify-content-end my-2">
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic" className="table-column-btn">
-            <BsGear />
+          <Dropdown.Toggle variant="primary" id="dropdown-basic" className="table-column-btn">
+            <img src={addIcon} alt="unassign" width="32px" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="table-column-filter">
             {columns.slice(5).map((column, index) => (
@@ -135,39 +157,47 @@ const AssignedTickets = () => {
       </Toast>
 
       {filtered?.length > 0 ? (
-        <Table striped hover responsive>
-          <thead>
-            <tr>
-              {columns.length > 0  && columns.map(({ id, fieldName, name, show }) => (
-                <th id={name} className={`${show ? "show" : "hide"} `} key={id}>
-                  {fieldName}
-                </th>
-              ))}
+        <div className="user-table overflow-x-auto mt-4">
+          <Table striped hover responsive bsPrefix="custom-table">
+            <thead>
+              <tr>
+                {columns.length > 0 && columns.map(({ id, fieldName, name, show }) => (
+                  <th id={name} className={`${show ? "show" : "hide"} `} key={id}>
+                    {fieldName}
+                  </th>
+                ))}
 
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="table-group-divider">
-            {filtered.map((item, index) => {
-              return (
-                <tr key={index}>
-                  {columns.length > 0  && columns.map(({ name, show }) => (
-                    <td id={name} className={`${show ? "show" : "hide"} `}>
-                      {name === "dueDate" ? getDate(item[name]) : (item[name] || "---")}
+                <th className="text-start">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="table-group-divider">
+              {filtered.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    {columns.length > 0 && columns.map(({ name, show }) => (
+                      <td id={name} className={`${show ? "show" : "hide"} `}>
+                        {name === "dueDate"
+                          ? getDate(item[name])
+                          : typeof item[name] === 'object'
+                            ? JSON.stringify(item[name])
+                            : (item[name] || "---")}
+                      </td>
+                    ))}
+                    <td id="actions" className="text-start">
+                      <span
+                        title="Un-Assign"
+                        role="button"
+                        onClick={() => handleUnassignment(item._id)}
+                      >
+                        <img className="bg-danger p-1 rounded-3" src={unassignIcon} alt="assign" width="32px" />
+                      </span>
                     </td>
-                  ))}
-                  <td id="actions" className="text-center">
-                    <i
-                      className="bi bi-person-dash-fill px-1"
-                      title="Un Assign"
-                      onClick={() => handleUnassignment(item._id)}
-                    ></i>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
       ) : (
         <h4 className="ms-3 mt-3">No assigned tickets found...</h4>
       )}
@@ -179,7 +209,7 @@ const AssignedTickets = () => {
           onPageChange={(page) => setCurrentPage(page)}
         />
       </div>
-    </Container>
+    </div>
   );
 };
 

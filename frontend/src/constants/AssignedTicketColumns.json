@@ -37,7 +37,7 @@
     },
     {
       "id": 7,
-      "fieldName": "Ticket Department",
+      "fieldName": "Tkt Department",
       "name": "ticketDept",
       "show": true
     },

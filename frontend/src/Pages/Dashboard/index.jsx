@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { axiosSecure } from "../../api/axios";
+import laptopIcon from "../../assests/icons/laptop-svgrepo-com.svg";
+import systemIcon from "../../assests/icons/cpu-svgrepo-com.svg";
+import ticketIcon from "../../assests/icons/ticket2-svgrepo-com.svg";
 
 const Dashboard = () => {
   const [dashboardStats, setDashboardStats] = useState({});
@@ -80,42 +83,44 @@ const Dashboard = () => {
 
   return (
     <div className="stock-main-body container">
-      <h2 className="py-3">Dashboard</h2>
+      <h2 className="py-3 border-bottom border-2 fw-bold">DASHBOARD</h2>
       <div className="row">
         {dashboardStats.length > 0 &&
           dashboardStats.map((stock, index) => (
             <div className="col-xl-3 col-lg-3 col-md-6" key={index}>
-              <div className="single-stock rounded-3 shadow text-center pt-5 mr-3 mb-3">
-                <h1 className="pb-3 fw-normal ">{stock.assignedDevicesCount}</h1>
-                <h5 className="mb-1 productName text-capitalize">{stock.deviceCategory}</h5>
-                <p className="stock-available border-bottom border-dark pb-5 stock">
-                  Available: {stock.availableDevicesCount}
-                </p>
-                <div className="total-stock row d-flex justify-content-center align-items-center">
-                  <div className="col-md-6 text-upercase">
-                    <p>Total</p>
-                  </div>
-                  <div className="col-md-6">
-                    <h1 className="fw-normal">{stock.availableDevicesCount + stock.assignedDevicesCount}</h1>
-                  </div>
+              <div className="single-stock rounded-4 shadow p-4">
+                <div className="p-3 border border-2 rounded-3 bg-body-secondary w-50 text-center">
+                  {stock.deviceCategory === "System" ? <img src={laptopIcon} alt="system" width="80px" /> : <img src={systemIcon} alt="accessories" width="80px" />}
+                </div>
+                <div className="p-1 border-bottom">
+                  <h3 className="py-3">{stock.deviceCategory}</h3>
+                  <p>Available: {stock.availableDevicesCount}</p>
+                  <p>Assigned: {stock.assignedDevicesCount}</p>
+                </div>
+                <div className="total-stock d-flex justify-content-between align-items-center">
+                  <p className="text-uppercase">Total</p>
+                  <h1 className="fw-normal">{stock.availableDevicesCount + stock.assignedDevicesCount}</h1>
                 </div>
               </div>
             </div>
           ))}
         <div className="col-xl-3 col-lg-3 col-md-6">
-          <div className="single-stock rounded-3 shadow text-center pt-5 mr-3 mb-3">
-            <h1 className="pb-3 fw-normal ">{ticketStats.totalTickets || 0}</h1>
-            <h5 className="mb-1 productName text-capitalize">Tickets</h5>
-            <p className="stock-available border-bottom border-dark pb-5 stock">
-              Assigned: {ticketStats.assignedTickets || 0}
-            </p>
-            <div className="total-stock row d-flex justify-content-center align-items-center">
-              <div className="col-md-6 text-upercase">
-                <p>Unassigned</p>
-              </div>
-              <div className="col-md-6">
-                <h1 className="fw-normal">{ticketStats.unassignedTickets || 0}</h1>
-              </div>
+          <div className="single-stock rounded-4 shadow p-4">
+            <div className="p-3 border border-2 rounded-3 bg-body-secondary w-50 text-center">
+              <img src={ticketIcon} alt="tickets" width="80px" />
+            </div>
+            <div className="p-1 border-bottom">
+              <h3 className="py-3">Tickets</h3>
+              <p>
+                Unassigned: {ticketStats.unassignedTickets || 0}
+              </p>
+              <p>
+                Assigned: {ticketStats.assignedTickets || 0}
+              </p>
+            </div>
+            <div className="total-stock d-flex justify-content-between align-items-center">
+                <p className="text-uppercase">Total</p>
+                <h1 className="fw-normal">{ticketStats.totalTickets || 0}</h1>
             </div>
           </div>
         </div>

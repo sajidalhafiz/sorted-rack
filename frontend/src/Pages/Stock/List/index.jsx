@@ -16,15 +16,18 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { convertDate } from "../../../Utility/utility";
 import { StockContext } from "../../../contexts/StockContext";
 import PaginationComponent from "../../../component/Pagination/Pagination";
-import { Col, Form } from "react-bootstrap";
+import { Col, Form, OverlayTrigger } from "react-bootstrap";
 import { Toaster } from "../../../component/Toaster/Toaster";
+import editIcon from "../../../assests/icons/pen-2-svgrepo-com.svg";
+import deleteIcon from "../../../assests/icons/trash-bin-minimalistic-svgrepo-com.svg";
+import assignIcon from "../../../assests/icons/user-plus-rounded-svgrepo-com.svg";
+import { Tooltip } from "bootstrap";
 
 const deleteStock = (stockItemId) =>
   axiosSecure.delete(`/product/${stockItemId}`, {
     headers: {
-      Authorization: `Bearer ${
-        localStorage.userDetails && JSON.parse(localStorage.userDetails).token
-      }`,
+      Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token
+        }`,
     },
   });
 
@@ -73,10 +76,9 @@ const ListStock = () => {
       requestConfig: [
         {
           headers: {
-            Authorization: `Bearer ${
-              localStorage.userDetails &&
+            Authorization: `Bearer ${localStorage.userDetails &&
               JSON.parse(localStorage.userDetails).token
-            }`,
+              }`,
           },
         },
       ],
@@ -85,9 +87,8 @@ const ListStock = () => {
   const getAllUsers = async () => {
     const { data } = await axiosSecure.get("/user", {
       headers: {
-        Authorization: `Bearer ${
-          localStorage.userDetails && JSON.parse(localStorage.userDetails).token
-        }`,
+        Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token
+          }`,
       },
     });
     userList.current = data.user.filter(
@@ -121,10 +122,9 @@ const ListStock = () => {
       },
       {
         headers: {
-          Authorization: `Bearer ${
-            localStorage.userDetails &&
+          Authorization: `Bearer ${localStorage.userDetails &&
             JSON.parse(localStorage.userDetails).token
-          }`,
+            }`,
         },
       }
     );
@@ -177,7 +177,7 @@ const ListStock = () => {
 
   const showDeviceDetails = () =>
     deviceCategory === "System" ? (
-      <Table className="mt-4" striped hover>
+      <Table className="mt-4" striped hover bsPrefix="custom-table">
         <thead>
           <tr>
             <th className="stock-brand">System Brand</th>
@@ -191,9 +191,9 @@ const ListStock = () => {
             <th className="stock-mac">MAC Address</th>
             <th className="stock-key">Product Key</th>
             <th className="stock-serial">Serial Number</th>
-            <th className="stock-date">Date OF Purchase</th>
+            <th className="stock-date">Purchase Date</th>
             <th className="stock-warranty">Warranty Period</th>
-            <th className="text-center table-action">Action</th>
+            <th className="text-start table-action">Action</th>
           </tr>
         </thead>
         <tbody className="table-group-divider">
@@ -215,35 +215,27 @@ const ListStock = () => {
                 {convertDate(item.dateOfPurchase || "")}{" "}
               </td>
               <td className="stock-warranty"> {item.warrantyPeriod} </td>
-              <td className="text-center table-action">
-                <Link
-                  to={`/stock/edit/${item._id}`}
-                  title="Edit"
-                  className="px-1"
-                  replace
-                >
-                  <i className="bi bi-pencil-square"></i>
+              <td className="d-flex justify-content-start gap-2">
+                <Link to={`/stock/edit/${item._id}`} title="Edit" replace>
+                  <img className="bg-warning p-1 rounded-3" src={editIcon} alt="edit" width="32px" />
                 </Link>
-                <i
-                  className="bi bi-trash-fill px-1"
-                  title="Delete"
-                  onClick={() => {
-                    handleRemoveDeviceModal();
-                    removeDeviceIdRef.current = item._id;
-                  }}
-                ></i>
-                <i
-                  title="Assign"
-                  className="bi bi-person-check-fill px-1"
-                  onClick={() => handleUserSelection(item._id)}
-                ></i>
+                <span role="button" title="Delete" onClick={() => {
+                  handleRemoveDeviceModal();
+                  removeDeviceIdRef.current = item._id;
+                }}
+                >
+                  <img className="bg-danger p-1 rounded-3" src={deleteIcon} alt="delete" width="32px" />
+                </span>
+                <span role="button" title="Assign" onClick={() => handleUserSelection(item._id)} >
+                  <img className="bg-primary p-1 rounded-3" src={assignIcon} alt="assign" width="32px" />
+                </span>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
     ) : (
-      <Table className="mt-4" striped hover>
+      <Table className="mt-4" striped hover bsPrefix="custom-table">
         <thead>
           <tr>
             <th>Accessories Type</th>
@@ -252,7 +244,7 @@ const ListStock = () => {
             <th>Serial Number</th>
             <th>Branch</th>
             <th>Warranty</th>
-            <th>Action</th>
+            <th className="text-start">Action</th>
           </tr>
         </thead>
         <tbody className="table-group-divider">
@@ -264,19 +256,20 @@ const ListStock = () => {
               <td> {item.serialNumber} </td>
               <td> {item.branch} </td>
               <td> {item.warrantyPeriod} </td>
-              <td>
-                <Link to={`/stock/edit/${item._id}`} replace>
-                  <BiEdit />
+              <td className="d-flex justify-content-start gap-2">
+                <Link to={`/stock/edit/${item._id}`} title="Edit" replace>
+                  {/* <BiEdit /> */}
+                  <img className="bg-warning p-1 rounded-3" src={editIcon} alt="edit" width="32px" />
                 </Link>
-                <AiFillDelete
-                  onClick={() => {
-                    handleRemoveDeviceModal();
-                    removeDeviceIdRef.current = item._id;
-                  }}
-                />
-                <MdAssignmentInd
-                  onClick={() => handleUserSelection(item._id)}
-                />
+                <span role="button" title="Delete" onClick={() => {
+                  handleRemoveDeviceModal();
+                  removeDeviceIdRef.current = item._id;
+                }}>
+                  <img className="bg-danger p-1 rounded-3" src={deleteIcon} alt="delete" width="32px" />
+                </span>
+                <span id="assign" role="button" title="Assign" onClick={() => handleUserSelection(item._id)}>
+                  <img className="bg-primary p-1 rounded-3" src={assignIcon} alt="assign" width="32px" />
+                </span>
               </td>
             </tr>
           ))}
@@ -352,9 +345,9 @@ const ListStock = () => {
         </Modal>
       </div>
 
-      <div className="row">
+      <div className="row border-bottom border-2">
         <div className="col-6">
-          <h2>Stock Listing</h2>
+          <h2 className="py-3 text-uppercase fw-bolder">Stock Listing</h2>
         </div>
 
         <div className="col-6 d-flex justify-content-end">

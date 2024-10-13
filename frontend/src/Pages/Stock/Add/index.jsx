@@ -18,7 +18,7 @@ const AddStock = () => {
     <Container style={{ width: "80%" }}>
       <Row>
         <Col xl={12}>
-          <h2 className="my-4 ">Add Stock</h2>
+          <h2 className="py-3 text-uppercase fw-bolder border-bottom border-2">Add Stock</h2>
         </Col>
       </Row>
       <Row>

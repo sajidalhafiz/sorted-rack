@@ -82,7 +82,7 @@ const AddUser = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <Container className="add-user-page d-flex flex-column justify-content-center">
-              <h2 className=" mb-4 ">Add User</h2>
+              <h2 className="mb-4 py-3 text-uppercase fw-bolder border-bottom border-2">Add User</h2>
               <h5 className="fw-bold mb-3">User Details</h5>
               <Row>
                 <Col md={6} lg={6} xl={6}>
@@ -215,7 +215,7 @@ const AddUser = () => {
               <Row></Row>
               <Col md={12} lg={12} xl={12} className="mt-4 mb-4 ">
                 <Button type="submit" disabled={isSubmitting}>
-                  CREATE USER
+                  Create User
                 </Button>
               </Col>
             </Container>

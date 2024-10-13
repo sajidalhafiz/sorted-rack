@@ -11,6 +11,7 @@ import { axiosSecure } from "../../../api/axios";
 import useAxios from "../../../Hooks/useAxios";
 import "./Edit.scss";
 import { Toaster } from "../../../component/Toaster/Toaster";
+
 const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,7 +48,6 @@ const EditUser = () => {
         branch: branch,
         status: status,
       });
-      // navigate("/user", { replace: true });
     }
   }, [response]);
 
@@ -70,6 +70,9 @@ const EditUser = () => {
             if (!values.branch) {
               errors.branch = "Branch is mandatory";
             }
+            if (!values.userType) {
+              errors.userType = "User role is mandatory";
+            }
             return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
@@ -84,7 +87,7 @@ const EditUser = () => {
                   email: values.email,
                   branch: values.branch,
                   status: values.status,
-                  role: "user",
+                  role: values.userType,
                 },
                 {
                   headers: {
@@ -108,11 +111,10 @@ const EditUser = () => {
             handleBlur,
             handleSubmit,
             isSubmitting,
-            /* and other goodies */
           }) => (
             <form onSubmit={handleSubmit}>
               <Container className="edit-user-page d-flex justify-content-center  flex-column">
-                <h2 className=" mb-4">Edit User</h2>
+                <h2 className="py-3 text-uppercase fw-bolder border-bottom border-2">Edit User</h2>
                 <Row>
                   <Col md={6} lg={6} xl={6}>
                     <FloatingLabel
@@ -173,18 +175,36 @@ const EditUser = () => {
                         value={values.branch}
                         onChange={handleChange}
                       >
-                        {/* <option selected disabled>Select</option> */}
                         <option value="Dhaka">Dhaka</option>
                         <option value="Goa">Goa</option>
                         <option value="Sylhet">Sylhet</option>
                       </Form.Select>
-                      <label for="floatingSelect">Select a branch</label>
+                      <label htmlFor="floatingSelect">Select a branch</label>
                       <div className="invalid-feedback">{errors.branch}</div>
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={6} lg={6} xl={6}>
+                    <FloatingLabel>
+                      <Form.Select
+                        className="form-select"
+                        type="text"
+                        name="userType"
+                        aria-label="Select a role"
+                        isInvalid={!!touched.userType && !!errors.userType}
+                        value={values.userType}
+                        onChange={handleChange}
+                      >
+                        <option value="user">user</option>
+                        <option value="admin">admin</option>
+                        <option value="superadmin">superadmin</option>
+                      </Form.Select>
+                      <label htmlFor="floatingSelect">Select a role</label>
+                      <div className="invalid-feedback">{errors.userType}</div>
                     </FloatingLabel>
                   </Col>
                   <Col md={12} lg={12} xl={12} className="mt-4 mb-4 ">
                     <Button type="submit" disabled={isSubmitting}>
-                      UPDATE USER
+                      Update User
                     </Button>
                   </Col>
                 </Row>
@@ -199,7 +219,7 @@ const EditUser = () => {
         showToaster={showToaster}
         setShowToaster={setShowToaster}
         to="user"
-      ></Toaster>
+      />
     </div>
   );
 };

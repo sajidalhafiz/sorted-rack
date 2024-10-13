@@ -1,3 +1,30 @@
 .user-table {
   height: auto;
 }
+
+.custom-table {
+  width: 100%;
+  thead {
+    background-color: #212529; // Light gray background for header
+    // border-radius: 8px 10px;
+    th {
+      color: #fff; // Dark text color for header
+      font-weight: bold;
+      padding: 16px;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(even) {
+        background-color: #f0f0f0; // Light gray for even rows
+      }
+      &:hover {
+        background-color: #f0f0f0; // Darker gray on hover
+      }
+      td{
+        padding: 16px;
+      }
+    }
+  }
+}
