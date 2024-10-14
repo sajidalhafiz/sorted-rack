@@ -104,7 +104,7 @@ const createAssignedTicket = async (req, res) => {
 const getAllAssignedTickets = async (req, res) => {
   try {
     const assignedTickets = await AssignedTicket.find({})
-      .populate('user', 'firstName lastName email')
+      .populate('user', 'fname lname email')
       .populate('ticket')
       .populate('assignedBy', 'email');
 
@@ -125,7 +125,8 @@ const getAllAssignedTickets = async (req, res) => {
         priority: ticket.ticket?.priority || 'N/A',
         status: ticket.ticket?.status || 'N/A',
         dueDate: ticket.ticket?.dueDate || null,
-        assignedBy: ticket.assignedBy?.email || 'N/A'
+        assignedBy: ticket.assignedBy?.email || 'N/A',
+        branch: ticket.branch || 'N/A'
       };
     }).filter(ticket => ticket !== null);  
 
@@ -179,7 +180,7 @@ const getCurrentUserAssignedTickets = async (req, res) => {
   if (!myList || myList.length === 0) {
     throw new CustomError.NotFoundError("No tickets assigned");
   }
-
+  console.log(myList)
   res.status(StatusCodes.OK).json({ myList });
 };
 
