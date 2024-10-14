@@ -109,10 +109,10 @@ const getAllAssignedTickets = async (req, res) => {
       .populate('assignedBy', 'email');
 
     const formattedTickets = assignedTickets.map(ticket => {
-      // Check if ticket or ticket.ticket is null
+      
       if (!ticket || !ticket.ticket) {
         console.error(`Found an assigned ticket with missing ticket data: ${ticket?._id}`);
-        return null;  // or return a placeholder object
+        return null;  
       }
 
       return {
@@ -127,7 +127,7 @@ const getAllAssignedTickets = async (req, res) => {
         dueDate: ticket.ticket?.dueDate || null,
         assignedBy: ticket.assignedBy?.email || 'N/A'
       };
-    }).filter(ticket => ticket !== null);  // Remove any null entries
+    }).filter(ticket => ticket !== null);  
 
     res.status(StatusCodes.OK).json({ assignedTickets: formattedTickets });
   } catch (error) {
@@ -138,10 +138,10 @@ const getAllAssignedTickets = async (req, res) => {
 
 const getSingleAssignedTicket = async (req, res) => {
   const { id: assignedTicketId } = req.params;
-  console.log('Fetching assigned ticket for ID:', ticketId);
+  console.log('Fetching assigned ticket for ID:', assignedTicketId);
 
   try {
-    let query = { ticket: ticketId };
+    let query = { ticket: assignedTicketId };
     if (req.user.role === "admin") {
       query.branch = req.user.branch;
     }
@@ -155,7 +155,7 @@ const getSingleAssignedTicket = async (req, res) => {
       .populate({ path: "assignedBy", select: "email" });
 
     if (!singleAssignedTicket) {
-      console.log('No assigned ticket found for ID:', ticketId);
+      console.log('No assigned ticket found for ID:', assignedTicketId);
       throw new CustomError.NotFoundError(`No assigned ticket found with id ${assignedTicketId}`);
     }
     console.log('Successfully fetched assigned ticket');
