@@ -149,7 +149,7 @@ const TicketDetails = () => {
                                 </p>
                             </div>
                             <h5>Messages:</h5>
-                            <div className='border border-2 rounded-3 bg-dark-subtle p-2 overflow-scroll' style={{ height: "auto" }}>
+                            <div className='border border-2 rounded-3 bg-dark-subtle p-2 overflow-scroll' style={{ height: "200px" }}>
                                 {ticket.message.map((msg, index) => (
                                     <div key={index} className="border shadow-sm p-2 mb-2 bg-white rounded-2">
                                         <small className='text-secondary'>{msg.authorId.fname} {msg.authorId.lname}</small>

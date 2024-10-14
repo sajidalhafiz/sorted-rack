@@ -13,6 +13,7 @@ import "../../Users/List/listUser.scss";
 import messageIcon from "../../../assests/icons/dialog-svgrepo-com.svg";
 import assignIcon from "../../../assests/icons/user-plus-rounded-svgrepo-com.svg";
 import deleteIcon from "../../../assests/icons/trash-bin-minimalistic-svgrepo-com.svg";
+import detailsIcon from "../../../assests/icons/square-top-down-svgrepo-com.svg";
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);
@@ -166,17 +167,10 @@ const TicketList = () => {
 
   return (
     <div>
-      {role === "user" && (
-        <div className="col-2">
-          <Link to="/ticket/createTicket" replace className="btn btn-primary">
-            Create Ticket
-          </Link>
-        </div>
-      )}
       <div className="flex-grow-1 mt-3 h-100 w-100 px-4">
         <div className="d-flex align-items-center justify-content-between border-bottom border-2">
           <div className="">
-            <h2 className="py-3 text-uppercase fw-bolder">Ticking Listing</h2>
+            <h2 className="py-3 text-uppercase fw-bolder">Ticket List</h2>
           </div>
           <div className="d-flex">
             <Form.Group
@@ -191,10 +185,13 @@ const TicketList = () => {
                 placeholder="Search with first name"
               />
             </Form.Group>
-
-            <Link to="/user/add" replace className="btn btn-primary">
-              Add User
-            </Link>
+            {role === "user" && (
+              <div className="">
+                <Link to="/ticket/createTicket" replace className="btn btn-primary">
+                  Create Ticket
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
@@ -229,7 +226,7 @@ const TicketList = () => {
             {filtered.map((ticket) => (
               <tr key={ticket._id}>
                 <td>
-                  <Link to={`/ticket/details/${ticket._id}`}>{ticket.ticketTitle}</Link>
+                  {ticket.ticketTitle}
                 </td>
                 {role !== "user" && (
                   <>
@@ -251,9 +248,12 @@ const TicketList = () => {
                 <td>{ticket.status}</td>
                 <td>{ticket.tag}</td>
                 <td className="d-flex gap-2 justify-content-start">
-                  <Link to={`/ticket/addMessage/${ticket._id}`} title="Message" replace>
-                    <img className="bg-success p-1 rounded-3" src={messageIcon} alt="message" width="32px" />
+                  <Link to={`/ticket/details/${ticket._id}`} title="View Details">
+                    <img className="bg-info p-1 rounded-3" src={detailsIcon} alt="delete" width="32px" />
                   </Link>
+                  {role !== "superadmin" && <Link to={`/ticket/addMessage/${ticket._id}`} title="Message" replace>
+                    <img className="bg-success p-1 rounded-3" src={messageIcon} alt="message" width="32px" />
+                  </Link>}
                   {role === "superadmin" && ticket.tag === "notassigned" && (
                     <span
                       title="Assign"
@@ -263,7 +263,7 @@ const TicketList = () => {
                       <img className="bg-primary p-1 rounded-3" src={assignIcon} alt="assign" width="32px" />
                     </span>
                   )}
-                  {ticket.status === "Closed" && (
+                  {role === "admin" && ticket.status === "Closed" && (
                     <span
                       title="Delete"
                       role="button"

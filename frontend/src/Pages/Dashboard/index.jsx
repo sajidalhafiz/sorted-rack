@@ -3,10 +3,12 @@ import { axiosSecure } from "../../api/axios";
 import laptopIcon from "../../assests/icons/laptop-svgrepo-com.svg";
 import systemIcon from "../../assests/icons/cpu-svgrepo-com.svg";
 import ticketIcon from "../../assests/icons/ticket2-svgrepo-com.svg";
+import { getUserDetails } from "../../service";
 
 const Dashboard = () => {
   const [dashboardStats, setDashboardStats] = useState({});
   const [ticketStats, setTicketStats] = useState({});
+  const { role } = getUserDetails();
 
   useEffect(() => {
     fetchProductStats();
@@ -84,7 +86,7 @@ const Dashboard = () => {
   return (
     <div className="stock-main-body container">
       <h2 className="py-3 border-bottom border-2 fw-bold">DASHBOARD</h2>
-      <div className="row">
+      {role !== "user" ? <div className="row">
         {dashboardStats.length > 0 &&
           dashboardStats.map((stock, index) => (
             <div className="col-xl-3 col-lg-3 col-md-6" key={index}>
@@ -124,7 +126,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> : 
+      <div>
+        Coming Soon...
+      </div>}
     </div>
   );
 };

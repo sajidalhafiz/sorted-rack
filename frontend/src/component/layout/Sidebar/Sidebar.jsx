@@ -16,6 +16,7 @@ import monitorIcon from "../../../assests/icons/monitor-svgrepo-com.svg";
 import logoutIcon from "../../../assests/icons/logout-2-svgrepo-com.svg";
 import userIcon from "../../../assests/icons/user-rounded-svgrepo-com.svg";
 import settingsIcon from "../../../assests/icons/settings-svgrepo-com.svg";
+import { Dropdown, Image } from "react-bootstrap";
 
 const Sidebar = () => {
   const { activeMenu, setActiveMenu } = useContext(SidebarContext);
@@ -125,7 +126,7 @@ const Sidebar = () => {
           }
         >
           <div className="d-flex align-items-center">
-
+            <img alt="Sorted Rack" src={dashboardIcon} width="28px" />
             <span className="ps-2">Dashboard</span>
           </div>
         </NavLink>
@@ -163,7 +164,7 @@ const Sidebar = () => {
     <>
       <li>
         <NavLink
-          to="/"
+          to="/ticket"
           className={({ isActive }) =>
             `nav-link text-white ${isActive ? "active" : undefined}`
           }
@@ -205,7 +206,7 @@ const Sidebar = () => {
         </nav>
 
         <hr />
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <p
             className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
             id="dropdownUser1"
@@ -247,7 +248,36 @@ const Sidebar = () => {
               </span>
             </li>
           </ul>
-        </div>
+        </div> */}
+        <Dropdown>
+          <Dropdown.Toggle variant="dark" id="dropdown-basic" className="d-flex align-items-center w-100 bg-transparent border-0">
+            <Image
+              src="https://github.com/mdo.png"
+              alt=""
+              width="32"
+              height="32"
+              roundedCircle
+              className="me-2"
+            />
+            <strong>{email}</strong>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu variant="dark">
+            <Dropdown.Item as={NavLink} to="/settings" className="d-flex align-items-center">
+              <img alt="Sorted Rack" src={settingsIcon} width="24px" />
+              <span className="ps-2">Settings</span>
+            </Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/profile" className="d-flex align-items-center">
+              <img alt="Sorted Rack" src={userIcon} width="24px" />
+              <span className="ps-2">Profile</span>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={handleLogout} className="d-flex align-items-center">
+              <img alt="Sorted Rack" src={logoutIcon} width="24px" />
+              <span className="ps-2">Logout</span>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     </div>
   );
