@@ -1,92 +1,44 @@
 [
     {
       "id": 1,
-      "fieldName": "First Name",
-      "name": "firstName",
-      "show": true
-    },
-    {
-      "id": 2,
-      "fieldName": "Last Name",
-      "name": "lastName",
-      "show": true
-    },
-    {
-      "id": 3,
-      "fieldName": "Email",
-      "name": "email",
-      "show": true
-    },
-    {
-      "id": 4,
-      "fieldName": "Branch",
-      "name": "branch",
-      "show": true
-    },
-    {
-      "id": 5,
-      "fieldName": "Username",
-      "name": "username",
-      "show": true
-    },
-    {
-      "id": 6,
       "fieldName": "Ticket Title",
       "name": "ticketTitle",
       "show": true
     },
     {
-      "id": 7,
+      "id": 2,
+      "fieldName": "Email",
+      "name": "email",
+      "show": true
+    },
+    {
+      "id": 3,
+      "fieldName": "Branch",
+      "name": "branch",
+      "show": true
+    },
+    {
+      "id": 4,
       "fieldName": "Tkt Department",
       "name": "ticketDept",
       "show": true
     },
     {
-      "id": 8,
+      "id": 5,
       "fieldName": "Priority",
       "name": "priority",
       "show": true
     },
     {
-      "id": 9,
+      "id": 6,
       "fieldName": "Status",
       "name": "status",
       "show": true
     },
     {
-      "id": 10,
-      "fieldName": "Created At",
-      "name": "createdAt",
-      "show": false
-    },
-    {
-      "id": 11,
+      "id": 7,
       "fieldName": "Due Date",
       "name": "dueDate",
       "show": true
-    },
-    {
-      "id": 12,
-      "fieldName": "Assigned By",
-      "name": "assignedBy",
-      "show": false
-    },
-    {
-      "id": 13,
-      "fieldName": "Assigned At",
-      "name": "assignedAt",
-      "show": false
-    },
-    {
-      "id": 14,
-      "fieldName": "Message",
-      "name": "message",
-      "show": false
-    },
-    {
-      "id": 15,
-      "fieldName": "Tag",
-      "name": "tag",
-      "show": false
     }
   ]

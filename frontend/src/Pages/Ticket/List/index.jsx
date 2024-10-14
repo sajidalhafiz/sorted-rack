@@ -249,7 +249,7 @@ const TicketList = () => {
                 <td>{ticket.tag}</td>
                 <td className="d-flex gap-2 justify-content-start">
                   <Link to={`/ticket/details/${ticket._id}`} title="View Details">
-                    <img className="bg-info p-1 rounded-3" src={detailsIcon} alt="delete" width="32px" />
+                    <img className="bg-info p-1 rounded-3" src={detailsIcon} alt="details" width="32px" />
                   </Link>
                   {role !== "superadmin" && <Link to={`/ticket/addMessage/${ticket._id}`} title="Message" replace>
                     <img className="bg-success p-1 rounded-3" src={messageIcon} alt="message" width="32px" />
@@ -263,7 +263,7 @@ const TicketList = () => {
                       <img className="bg-primary p-1 rounded-3" src={assignIcon} alt="assign" width="32px" />
                     </span>
                   )}
-                  {role === "admin" && ticket.status === "Closed" && (
+                  {role === "superadmin" && ticket.status === "Closed" && (
                     <span
                       title="Delete"
                       role="button"

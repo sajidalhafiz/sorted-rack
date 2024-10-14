@@ -57,10 +57,10 @@ function App() {
 
           {role === "admin" && (
             <>
-               <Route index element={<Dashboard />} />
-               <Route path="user" element={<ListUser />} />
-               <Route path="ticket" element={<TicketList />} />
-               <Route path="assignedTicket" element={<AssignedTickets />} />
+              <Route index element={<Dashboard />} />
+              <Route path="ticket" element={<TicketList />} />
+              <Route path="ticket/addMessage/:id" element={<Messsage />} />
+              <Route path="ticket/details/:id" element={<TicketDetails />} />
             </>
           )}
           {role === "user" && (
@@ -72,6 +72,7 @@ function App() {
               <Route path="ticket" element={<TicketList />} />
               <Route path="ticket/createTicket" element={<CreateTicket />} />
               <Route path="ticket/addMessage/:id" element={<Messsage />} />
+              <Route path="ticket/details/:id" element={<TicketDetails />} />
             </>
           )}
         </Route>

@@ -131,7 +131,7 @@ const Sidebar = () => {
           </div>
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink
           to="/user"
           className={({ isActive }) =>
@@ -143,17 +143,17 @@ const Sidebar = () => {
             <span className="ps-2">Admin</span>
           </div>
         </NavLink>
-      </li>
+      </li> */}
       <li>
         <NavLink
-          to="/assignedTicket"
+          to="/ticket"
           className={({ isActive }) =>
             `nav-link text-white ${isActive ? "active" : undefined}`
           }
         >
           <div className="d-flex align-items-center">
             <img alt="Sorted Rack" src={ticketIcon} width="28px" />
-            <span className="ps-2">Assigned Tickets</span>
+            <span className="ps-2">Ticket List</span>
           </div>
         </NavLink>
       </li>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { BsGear } from 'react-icons/bs';
+import { BsGear } from "react-icons/bs";
 import { BiCheckCircle } from "react-icons/bi";
 import { Form, Table, Toast, Container, Dropdown, Col } from "react-bootstrap";
 import { axiosSecure } from "../../api/axios";
@@ -14,7 +14,7 @@ const AssignedTickets = () => {
   const [search, setSearch] = useState("");
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 5;
   const [showToaster, setShowToaster] = useState(false);
 
   // const getAssignedTicketDetails = async () => {
@@ -31,18 +31,22 @@ const AssignedTickets = () => {
     try {
       const response = await axiosSecure.get("/assignedTicket", {
         headers: {
-          Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
+          Authorization: `Bearer ${
+            localStorage.userDetails &&
+            JSON.parse(localStorage.userDetails).token
+          }`,
         },
       });
 
       if (response.data && response.data.assignedTickets) {
         setAssignedTicketsList(response.data.assignedTickets);
+        console.log(response.data.assignedTickets);
       } else {
-        console.error('Unexpected response format:', response);
+        console.error("Unexpected response format:", response);
         setAssignedTicketsList([]);
       }
     } catch (error) {
-      console.error('Error fetching assigned tickets:', error);
+      console.error("Error fetching assigned tickets:", error);
       setAssignedTicketsList([]);
     }
   };
@@ -50,7 +54,8 @@ const AssignedTickets = () => {
   const getDate = (date) => {
     const newDate = new Date(date);
     const dt = newDate.getUTCDate();
-    const month = newDate.getUTCMonth() + 1 === 13 ? 12 : newDate.getUTCMonth() + 1;
+    const month =
+      newDate.getUTCMonth() + 1 === 13 ? 12 : newDate.getUTCMonth() + 1;
     const year = newDate.getUTCFullYear();
     return `${dt}-${month}-${year}`;
   };
@@ -62,7 +67,10 @@ const AssignedTickets = () => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.userDetails && JSON.parse(localStorage.userDetails).token}`,
+            Authorization: `Bearer ${
+              localStorage.userDetails &&
+              JSON.parse(localStorage.userDetails).token
+            }`,
           },
         }
       );
@@ -87,9 +95,11 @@ const AssignedTickets = () => {
     let filteredResult = assignedTicketsList;
     setTotalItems(filteredResult?.length);
     if (search) {
-      filteredResult = filteredResult.filter((result) =>
-        result.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        result.ticketTitle.toLowerCase().includes(search.toLowerCase())
+      filteredResult = filteredResult.filter(
+        (result) =>
+          result.ticketTitle.toLowerCase().includes(search.toLowerCase()) ||
+          result.ticket?.branch.toLowerCase().includes(search.toLowerCase()) ||
+          result.ticket?.tag.toLowerCase().includes(search.toLowerCase())
       );
     }
     return filteredResult?.slice(
@@ -101,14 +111,21 @@ const AssignedTickets = () => {
   const handlerCheckbox = (e) => {
     const checkboxStatus = e.target.checked;
     const name = e.target.name;
-    const updatedColumns = columns.length > 0 && columns.map((column) => {
-      if (column.name === name) {
-        column.show = !column.show;
-      }
-      return column;
-    });
+    const updatedColumns =
+      columns.length > 0 &&
+      columns.map((column) => {
+        if (column.name === name) {
+          column.show = !column.show;
+        }
+        return column;
+      });
     setColumns(updatedColumns);
-    setTimeout(() => (document.querySelectorAll(`input[name=${name}]`)[0].checked = checkboxStatus), 500);
+    setTimeout(
+      () =>
+        (document.querySelectorAll(`input[name=${name}]`)[0].checked =
+          checkboxStatus),
+      500
+    );
   };
 
   return (
@@ -117,20 +134,38 @@ const AssignedTickets = () => {
         <div className="col-9">
           <h2 className=" py-3 text-uppercase fw-bolder">Assigned Tickets</h2>
         </div>
-        <Form.Group as={Col} md="3" className="pe-3" controlId="validationCustom01">
-          <Form.Control onChange={handleSearch} type="text" placeholder="Search tickets by name or title" />
+        <Form.Group
+          as={Col}
+          md="3"
+          className="pe-3"
+          controlId="validationCustom01"
+        >
+          <Form.Control
+            onChange={handleSearch}
+            type="text"
+            placeholder="Search tickets by name or title"
+          />
         </Form.Group>
       </div>
 
       <div className="d-flex justify-content-end my-2">
         <Dropdown>
-          <Dropdown.Toggle variant="primary" id="dropdown-basic" className="table-column-btn">
+          <Dropdown.Toggle
+            variant="primary"
+            id="dropdown-basic"
+            className="table-column-btn"
+          >
             <img src={addIcon} alt="unassign" width="32px" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="table-column-filter">
             {columns.slice(5).map((column, index) => (
               <Dropdown.Item key={index}>
-                <input type="checkbox" name={column.name} onChange={handlerCheckbox} checked={column.show} />
+                <input
+                  type="checkbox"
+                  name={column.name}
+                  onChange={handlerCheckbox}
+                  checked={column.show}
+                />
                 <label>&nbsp;{column.fieldName}</label>
               </Dropdown.Item>
             ))}
@@ -161,11 +196,16 @@ const AssignedTickets = () => {
           <Table striped hover responsive bsPrefix="custom-table">
             <thead>
               <tr>
-                {columns.length > 0 && columns.map(({ id, fieldName, name, show }) => (
-                  <th id={name} className={`${show ? "show" : "hide"} `} key={id}>
-                    {fieldName}
-                  </th>
-                ))}
+                {columns.length > 0 &&
+                  columns.map(({ id, fieldName, name, show }) => (
+                    <th
+                      id={name}
+                      className={`${show ? "show" : "hide"} `}
+                      key={id}
+                    >
+                      {fieldName}
+                    </th>
+                  ))}
 
                 <th className="text-start">Actions</th>
               </tr>
@@ -174,22 +214,30 @@ const AssignedTickets = () => {
               {filtered.map((item, index) => {
                 return (
                   <tr key={index}>
-                    {columns.length > 0 && columns.map(({ name, show }) => (
-                      <td id={name} className={`${show ? "show" : "hide"} `}>
-                        {name === "dueDate"
-                          ? getDate(item[name])
-                          : typeof item[name] === 'object'
+                    {columns.length > 0 &&
+                      columns.map(({ name, show }) => (
+                        <td id={name} className={`${show ? "show" : "hide"} `}>
+                          {name === "dueDate"
+                            ? getDate(item[name])
+                            : name === "branch" || name === "tag"
+                            ? item[name] || "---"
+                            : typeof item[name] === "object"
                             ? JSON.stringify(item[name])
-                            : (item[name] || "---")}
-                      </td>
-                    ))}
+                            : item[name] || "---"}
+                        </td>
+                      ))}
                     <td id="actions" className="text-start">
                       <span
                         title="Un-Assign"
                         role="button"
                         onClick={() => handleUnassignment(item._id)}
                       >
-                        <img className="bg-danger p-1 rounded-3" src={unassignIcon} alt="assign" width="32px" />
+                        <img
+                          className="bg-danger p-1 rounded-3"
+                          src={unassignIcon}
+                          alt="assign"
+                          width="32px"
+                        />
                       </span>
                     </td>
                   </tr>
